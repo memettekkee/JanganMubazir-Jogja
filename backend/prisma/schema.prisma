@@ -39,6 +39,10 @@ model Post {
   title     String     // judul postingan
   content   String?    // isi postingan
   status    PostStatus @default(PENDING) // default status adalah pending
+  post_note String?
+  post_stat String?
+  exp_after String
+  exp_real  String
   author    User       @relation(fields: [authorId], references: [user_id])
   authorId  String
   createdAt DateTime   @default(now())

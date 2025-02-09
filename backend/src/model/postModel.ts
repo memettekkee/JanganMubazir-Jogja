@@ -37,7 +37,8 @@ export const postById = async (postId: string) => {
             author: {
                 select: {
                     user_id: true,
-                    name: true,        
+                    name: true,
+                    image: true,        
                     email: true
                 }
             }
@@ -46,26 +47,28 @@ export const postById = async (postId: string) => {
     return post
 }
 
-export const updatePost = async (postId: string, title: string, content: string, exp_after: string, exp_real: string) => {
+export const updatePost = async (postId: string, title: string, content: string, exp_after: string, exp_real: string, image: any) => {
     const post = await prisma.post.update({
         where: {post_id: postId},
         data: {
             title: title,
             content: content,
             exp_after: exp_after,
-            exp_real: exp_real
+            exp_real: exp_real,
+            image: image
         }
     })
     return post
 }
 
-export const adminUpdatePost = async (postId: string, status: PostStatus, postNote: string, postStat: string) => {
+export const adminUpdatePost = async (postId: string, status: PostStatus, postNote: string, postStat: string, postImg: any) => {
     const post = await prisma.post.update({
         where: {post_id: postId},
         data: {
             status: status,
             post_note: postNote,
-            post_stat: postStat
+            post_stat: postStat,
+            post_img: postImg
         }
     })
     return post

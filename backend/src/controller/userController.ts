@@ -8,6 +8,7 @@ export const registerCtrl = async (
 ) => {
     const { name, email, password } = req.body;
     let hashedPass = await bcrypt.hashSync(password, 10);
+    const image = 'https://storage.googleapis.com/skripsi_uin_bucket/default.jpeg'
 
     const checkUser = await existingUser(email)
 
@@ -22,6 +23,7 @@ export const registerCtrl = async (
     const userData = {
         name: name,
         email: email,
+        image: image,
         password: hashedPass
     }
 

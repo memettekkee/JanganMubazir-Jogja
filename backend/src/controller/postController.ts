@@ -1,11 +1,14 @@
 import express from 'express'
 import { allPost, createPost, postById, postId, updatePost } from '../model/postModel'
+import { MulterGoogleCloudFile } from '../utils/bucketUpload'
 
 export const createPostCtrl = async (
     req: express.Request,
     res: express.Response
 ) => {
     const { title, content, exp_after, exp_real ,authorId } = req.body
+    const file = req.file as MulterGoogleCloudFile
+    const image = file?.cloudStoragePublicUrl;
 
     if (!title && !content && !authorId && !exp_after && !exp_real) {
         res.status(400).json({
@@ -20,6 +23,7 @@ export const createPostCtrl = async (
         content: content,
         exp_after: exp_after,
         exp_real: exp_real,
+        image: image,
         authorId: authorId
     }
 
@@ -91,7 +95,7 @@ export const getPostByIdCtrl = async (
         res.status(200).json({
             error: false,
             message: "Post ada !",
-            user: checkPost
+            post_detail: checkPost
         })
         return
 
@@ -110,6 +114,8 @@ export const updatePostCtrl = async (
 ) => {
     const { post_id } = req.params
     const { title, content, exp_after, exp_real ,authorId } = req.body
+    const file = req.file as MulterGoogleCloudFile
+    const image = file?.cloudStoragePublicUrl;
 
     const checkUser = await postId(post_id)
 
@@ -122,7 +128,7 @@ export const updatePostCtrl = async (
     }
 
     try {
-        const UpdatedData = await updatePost(post_id, title, content, exp_after, exp_real)
+        const UpdatedData = await updatePost(post_id, title, content, exp_after, exp_real, image)
 
         res.status(200).json({
             error: false,

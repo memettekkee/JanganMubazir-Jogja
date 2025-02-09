@@ -1,6 +1,7 @@
 import express from 'express'
 import { adminDeletePost, adminUpdatePost } from '../model/postModel'
 import { adminDeleteUser } from '../model/userModel'
+import { MulterGoogleCloudFile } from '../utils/bucketUpload'
 
 export const adminUpdatePostCtrl = async (
     req: express.Request,
@@ -8,6 +9,8 @@ export const adminUpdatePostCtrl = async (
 ) => {
     const { post_id } = req.params
     const { status, post_note, post_stat } = req.body
+    const file = req.file as MulterGoogleCloudFile
+    const post_img = file?.cloudStoragePublicUrl;
 
     if (!post_note && !post_stat) {
         res.status(400).json({
@@ -18,7 +21,7 @@ export const adminUpdatePostCtrl = async (
     }
 
     try {
-        const updatedData = await adminUpdatePost(post_id, status, post_note, post_stat)
+        const updatedData = await adminUpdatePost(post_id, status, post_note, post_stat, post_img)
 
         res.status(200).json({
             error: false,
